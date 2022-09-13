@@ -1,7 +1,7 @@
-players
-resources
-skyblock
+/world/
+/players/
+/resources/
+/skyblock/
 config.toml
 *.exe
-./world/
-.idea
+/.idea/
