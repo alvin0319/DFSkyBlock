@@ -171,7 +171,7 @@ func (t *SpruceTree) GenerateTrunkHeight(rand *rand.Rand) int {
 func NewOakTree() *Tree {
 	return &Tree{
 		Name: "Oak Tree",
-		TrunkBlock: block.Wood{
+		TrunkBlock: block.Log{
 			Wood:     block.OakWood(),
 			Stripped: false,
 			Axis:     cube.Y,
@@ -191,7 +191,7 @@ func NewBirchTree(superBirch bool) *BirchTree {
 		SuperBirch: superBirch,
 		Tree: Tree{
 			Name: "Birch Tree",
-			TrunkBlock: block.Wood{
+			TrunkBlock: block.Log{
 				Wood:     block.BirchWood(),
 				Stripped: false,
 				Axis:     cube.Y,
@@ -211,7 +211,7 @@ func NewSpruceTree() *SpruceTree {
 	return &SpruceTree{
 		Tree: Tree{
 			Name: "Spruce Tree",
-			TrunkBlock: block.Wood{
+			TrunkBlock: block.Log{
 				Wood:     block.SpruceWood(),
 				Stripped: false,
 				Axis:     cube.Y,
@@ -230,7 +230,7 @@ func NewSpruceTree() *SpruceTree {
 func NewJungleTree() *Tree {
 	return &Tree{
 		Name: "Jungle Tree",
-		TrunkBlock: block.Wood{
+		TrunkBlock: block.Log{
 			Wood:     block.JungleWood(),
 			Stripped: false,
 			Axis:     cube.Y,
