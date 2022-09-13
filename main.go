@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/alvin0319/DFSkyBlock/server/command"
 	"github.com/alvin0319/DFSkyBlock/server/handler"
 	"github.com/alvin0319/DFSkyBlock/server/world"
 	"github.com/df-mc/dragonfly/server"
+	"github.com/df-mc/dragonfly/server/cmd"
 	"github.com/df-mc/dragonfly/server/player"
 	"github.com/df-mc/dragonfly/server/player/chat"
 	"github.com/pelletier/go-toml"
@@ -32,6 +34,8 @@ func main() {
 			panic(err)
 		}
 	}
+
+	cmd.Register(cmd.New("gamemode", "Set the gamemode of a player.", nil, command.GameMode{}))
 
 	var treeType world.TreeInterface
 
