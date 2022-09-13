@@ -35,7 +35,7 @@ func main() {
 
 	var treeType world.TreeInterface
 
-	switch config.TreeType {
+	switch config.SkyBlock.TreeType {
 	case "oak":
 		treeType = world.NewOakTree()
 	case "birch":
@@ -100,11 +100,17 @@ func readConfig() (config, error) {
 	if err := toml.Unmarshal(data, &c); err != nil {
 		return c, fmt.Errorf("error decoding config: %v", err)
 	}
+	if c.SkyBlock.TreeType == "" {
+		c.SkyBlock.TreeType = "oak"
+	}
 	return c, nil
 }
 
 type config struct {
 	server.Config
 
-	TreeType string `toml:"tree_type"`
+	SkyBlock struct {
+		// set tree type default is oak
+		TreeType string `toml:"tree_type"`
+	}
 }
