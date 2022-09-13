@@ -3,5 +3,5 @@ resources
 skyblock
 config.toml
 *.exe
-world
+./world
 .idea
