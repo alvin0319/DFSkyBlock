@@ -8,6 +8,7 @@ import (
 	"math/rand"
 )
 
+// TreeInterface provides methods for Tree.
 type TreeInterface interface {
 	CanPlaceObject(w *world.World, x, y, z int, rand *rand.Rand) bool
 	CanOverride(b world.Block) bool
@@ -79,6 +80,7 @@ func (t *Tree) CanOverride(b world.Block) bool {
 	return false
 }
 
+// PlaceTree places the tree at the given position.
 func (t *Tree) PlaceTree(w *world.World, pos *cube.Pos, rand *rand.Rand) error {
 	//if !t.CanPlaceObject(w, pos.X(), pos.Y(), pos.Z(), rand) {
 	//	return fmt.Errorf("cannot place tree at %v", pos)
@@ -88,10 +90,12 @@ func (t *Tree) PlaceTree(w *world.World, pos *cube.Pos, rand *rand.Rand) error {
 	return nil
 }
 
+// GenerateTrunkHeight returns the height of the trunk of the tree.
 func (t *Tree) GenerateTrunkHeight(rand *rand.Rand) int {
 	return t.TreeHeight + 1
 }
 
+// PlaceTrunk places the trunk of the tree at the given position.
 func (t *Tree) PlaceTrunk(x, y, z int, rand *rand.Rand, trunkHeight int, w *world.World) {
 	w.SetBlock(cube.Pos{x, y - 1, z}, block.Dirt{}, nil)
 
@@ -104,6 +108,7 @@ func (t *Tree) PlaceTrunk(x, y, z int, rand *rand.Rand, trunkHeight int, w *worl
 	}
 }
 
+// PlaceCanopy places the canopy of the tree at the given position.
 func (t *Tree) PlaceCanopy(x, y, z int, rand *rand.Rand, w *world.World) {
 	for yy := y - 3 + t.TreeHeight; yy <= y+t.TreeHeight; yy++ {
 		yOff := yy - (y + t.TreeHeight)
@@ -123,6 +128,7 @@ func (t *Tree) PlaceCanopy(x, y, z int, rand *rand.Rand, w *world.World) {
 	}
 }
 
+// PlaceCanopy places the canopy of the tree at the given position for SpruceTree.
 func (t *SpruceTree) PlaceCanopy(x, y, z int, rand *rand.Rand, w *world.World) {
 	topSize := t.TreeHeight - (1 + rand.Intn(2))
 	lRadius := 2 + rand.Intn(2)
@@ -156,10 +162,12 @@ func (t *SpruceTree) PlaceCanopy(x, y, z int, rand *rand.Rand, w *world.World) {
 	}
 }
 
+// GenerateTrunkHeight returns height of the trunk of the SpruceTree.
 func (t *SpruceTree) GenerateTrunkHeight(rand *rand.Rand) int {
 	return t.TreeHeight + rand.Intn(3)
 }
 
+// NewOakTree returns a new oak Tree.
 func NewOakTree() *Tree {
 	return &Tree{
 		Name: "Oak Tree",
@@ -177,6 +185,7 @@ func NewOakTree() *Tree {
 	}
 }
 
+// NewBirchTree returns a new BirchTree.
 func NewBirchTree(superBirch bool) *BirchTree {
 	return &BirchTree{
 		SuperBirch: superBirch,
@@ -196,6 +205,8 @@ func NewBirchTree(superBirch bool) *BirchTree {
 		},
 	}
 }
+
+// NewSpruceTree returns a new SpruceTree.
 func NewSpruceTree() *SpruceTree {
 	return &SpruceTree{
 		Tree: Tree{
@@ -215,6 +226,7 @@ func NewSpruceTree() *SpruceTree {
 	}
 }
 
+// NewJungleTree returns a new jungle Tree.
 func NewJungleTree() *Tree {
 	return &Tree{
 		Name: "Jungle Tree",

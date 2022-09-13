@@ -21,6 +21,7 @@ type Manager struct {
 	Tree TreeInterface
 }
 
+// NewManager returns a new world manager.
 func NewManager(treeType TreeInterface) *Manager {
 	return &Manager{
 		worlds: make(map[string]*world.World),
@@ -29,6 +30,7 @@ func NewManager(treeType TreeInterface) *Manager {
 	}
 }
 
+// GetWorld returns the world by the given name. If the world is not loaded, it will return error.
 func (m *Manager) GetWorld(name string) (*world.World, error) {
 	if w, ok := m.worlds[name]; ok {
 		return w, nil
@@ -38,7 +40,6 @@ func (m *Manager) GetWorld(name string) (*world.World, error) {
 
 // NewWorld generates new world by given name.
 // If creating provider fails, the error will be returned.
-
 func (m *Manager) NewWorld(name string) (*world.World, error) {
 	p, err := mcdb.New("skyblock/"+name, opt.DefaultCompression)
 	if err != nil {

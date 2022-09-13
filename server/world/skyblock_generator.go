@@ -8,10 +8,12 @@ import (
 	"github.com/df-mc/dragonfly/server/world/generator"
 )
 
+// SkyBlockGenerator is a generator that generates a flat world with a single layer of water.
 type SkyBlockGenerator struct {
 	generator.Flat
 }
 
+// NewGenerator returns a new SkyBlockGenerator.
 func NewGenerator() *SkyBlockGenerator {
 	water := block.Water{
 		Still:   true,
@@ -23,6 +25,7 @@ func NewGenerator() *SkyBlockGenerator {
 	}
 }
 
+// GenerateChunk ...
 func (g *SkyBlockGenerator) GenerateChunk(pos world.ChunkPos, chunk *chunk.Chunk) {
 	g.Flat.GenerateChunk(pos, chunk)
 }
