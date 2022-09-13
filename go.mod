@@ -1,4 +1,4 @@
-module DFSkyBlock
+module github.com/alvin0319/DFSkyBlock
 
 go 1.19
 

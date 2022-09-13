@@ -2,12 +2,16 @@ package main
 
 import (
 	"fmt"
+	"github.com/alvin0319/DFSkyBlock/server/handler"
+	"github.com/alvin0319/DFSkyBlock/server/world"
 	"github.com/df-mc/dragonfly/server"
 	"github.com/df-mc/dragonfly/server/player"
 	"github.com/df-mc/dragonfly/server/player/chat"
 	"github.com/pelletier/go-toml"
 	"github.com/sirupsen/logrus"
 	"os"
+	"strconv"
+	"time"
 )
 
 func main() {
@@ -19,7 +23,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	srv := server.New(&config, log)
+	srv := server.New(&config.Config, log)
 	srv.CloseOnProgramEnd()
 
 	skyBlockPath := "skyblock"
@@ -29,17 +33,56 @@ func main() {
 		}
 	}
 
+	var treeType world.TreeInterface
+
+	switch config.TreeType {
+	case "oak":
+		treeType = world.NewOakTree()
+	case "birch":
+		treeType = world.NewBirchTree(false)
+	case "spruce":
+		treeType = world.NewSpruceTree()
+	case "jungle":
+		treeType = world.NewJungleTree()
+	default:
+		treeType = world.NewOakTree()
+	}
+
+	log.Infof("Selected tree type: %v", treeType.GetName())
+
+	worldManager := world.NewManager(treeType)
+
+	newWorld, err := worldManager.NewWorld("test")
+	if err != nil {
+		panic(err)
+	}
+
+	log.Printf("Loaded custom world %v", newWorld.Name())
+
 	if err := srv.Start(); err != nil {
 		panic(err)
 	}
 	for srv.Accept(func(p *player.Player) {
+		go func() {
+			for {
+				x := strconv.Itoa(int(p.Position().X()))
+				y := strconv.Itoa(int(p.Position().Y()))
+				z := strconv.Itoa(int(p.Position().Z()))
+				p.SendTip("Current pos: " + x + ":" + y + ":" + z)
+				time.Sleep(1 * time.Second)
+			}
+		}()
+		newWorld.AddEntity(p)
+		p.Handle(handler.NewHandler(p))
 	}) {
 	}
 }
 
 // readConfig reads the configuration from the config.toml file, or creates the file if it does not yet exist.
-func readConfig() (server.Config, error) {
-	c := server.DefaultConfig()
+func readConfig() (config, error) {
+	c := config{
+		Config: server.DefaultConfig(),
+	}
 	if _, err := os.Stat("config.toml"); os.IsNotExist(err) {
 		data, err := toml.Marshal(c)
 		if err != nil {
@@ -58,4 +101,10 @@ func readConfig() (server.Config, error) {
 		return c, fmt.Errorf("error decoding config: %v", err)
 	}
 	return c, nil
+}
+
+type config struct {
+	server.Config
+
+	TreeType string `toml:"tree_type"`
 }
