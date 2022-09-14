@@ -54,14 +54,7 @@ func main() {
 
 	log.Infof("Selected tree type: %v", treeType.GetName())
 
-	worldManager := world.NewManager(treeType)
-
-	newWorld, err := worldManager.NewWorld("test")
-	if err != nil {
-		panic(err)
-	}
-
-	log.Printf("Loaded custom world %v", newWorld.Name())
+	world.InitManager(treeType)
 
 	if err := srv.Start(); err != nil {
 		panic(err)
@@ -72,11 +65,10 @@ func main() {
 				x := strconv.Itoa(int(p.Position().X()))
 				y := strconv.Itoa(int(p.Position().Y()))
 				z := strconv.Itoa(int(p.Position().Z()))
-				p.SendTip("Current pos: " + x + ":" + y + ":" + z)
+				p.SendTip("Current pos: " + x + ":" + y + ":" + z + ":" + p.World().Name())
 				time.Sleep(1 * time.Second)
 			}
 		}()
-		newWorld.AddEntity(p)
 		p.Handle(handler.NewHandler(p))
 	}) {
 	}

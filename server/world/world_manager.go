@@ -21,13 +21,22 @@ type Manager struct {
 	Tree TreeInterface
 }
 
-// NewManager returns a new world manager.
-func NewManager(treeType TreeInterface) *Manager {
-	return &Manager{
+var manager *Manager
+
+// InitManager creates a new world manager.
+func InitManager(treeType TreeInterface) {
+	manager = &Manager{
 		worlds: make(map[string]*world.World),
 		Log:    logrus.New(),
 		Tree:   treeType,
 	}
+}
+
+func GetManager() *Manager {
+	if manager == nil {
+		panic("manager is not initialized")
+	}
+	return manager
 }
 
 // GetWorld returns the world by the given name. If the world is not loaded, it will return error.
