@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	command "github.com/alvin0319/DFSkyBlock/server/command"
+	"github.com/alvin0319/DFSkyBlock/server/command"
 	"github.com/alvin0319/DFSkyBlock/server/handler"
 	"github.com/alvin0319/DFSkyBlock/server/session"
 	"github.com/alvin0319/DFSkyBlock/server/world"
