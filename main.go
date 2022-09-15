@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/alvin0319/DFSkyBlock/server/command"
+	command "github.com/alvin0319/DFSkyBlock/server/command"
 	"github.com/alvin0319/DFSkyBlock/server/handler"
+	"github.com/alvin0319/DFSkyBlock/server/session"
 	"github.com/alvin0319/DFSkyBlock/server/world"
 	"github.com/df-mc/dragonfly/server"
 	"github.com/df-mc/dragonfly/server/cmd"
@@ -12,8 +13,6 @@ import (
 	"github.com/pelletier/go-toml"
 	"github.com/sirupsen/logrus"
 	"os"
-	"strconv"
-	"time"
 )
 
 func main() {
@@ -60,16 +59,10 @@ func main() {
 		panic(err)
 	}
 	for srv.Accept(func(p *player.Player) {
-		go func() {
-			for {
-				x := strconv.Itoa(int(p.Position().X()))
-				y := strconv.Itoa(int(p.Position().Y()))
-				z := strconv.Itoa(int(p.Position().Z()))
-				p.SendTip("Current pos: " + x + ":" + y + ":" + z + ":" + p.World().Name())
-				time.Sleep(1 * time.Second)
-			}
-		}()
-		p.Handle(handler.NewHandler(p))
+		h := handler.NewHandler(p)
+		p.Handle(h)
+		u := session.CreateUser(p)
+		u.Initialize()
 	}) {
 	}
 }
