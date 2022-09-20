@@ -24,7 +24,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	srv := server.New(&config.Config, log)
+	serverConf, err := config.UserConfig.Config(log)
+	if err != nil {
+		panic(err)
+	}
+	srv := serverConf.New()
 	srv.CloseOnProgramEnd()
 
 	skyBlockPath := "skyblock"
@@ -55,9 +59,7 @@ func main() {
 
 	world.InitManager(treeType)
 
-	if err := srv.Start(); err != nil {
-		panic(err)
-	}
+	srv.Listen()
 	for srv.Accept(func(p *player.Player) {
 		h := handler.NewHandler(p)
 		p.Handle(h)
@@ -70,7 +72,7 @@ func main() {
 // readConfig reads the configuration from the config.toml file, or creates the file if it does not yet exist.
 func readConfig() (config, error) {
 	c := config{
-		Config: server.DefaultConfig(),
+		UserConfig: server.DefaultConfig(),
 	}
 	if _, err := os.Stat("config.toml"); os.IsNotExist(err) {
 		data, err := toml.Marshal(c)
@@ -96,7 +98,7 @@ func readConfig() (config, error) {
 }
 
 type config struct {
-	server.Config
+	server.UserConfig
 
 	SkyBlock struct {
 		// set tree type default is oak
